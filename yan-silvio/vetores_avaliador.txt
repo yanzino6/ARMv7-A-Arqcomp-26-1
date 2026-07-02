@@ -1,0 +1,35 @@
+# Test Vector do avaliador de condicao ARMv7 (Grupo D)
+# Colunas: cond[4] | NZCV[4] (ordem N Z C V do MSB ao LSB) | cond_pass (1 bit)
+# Largura declarada em colchetes; valores em binario. Comentario apos # e ignorado.
+# Carregar em Simulate > Test Vector.
+cond[4] NZCV[4] cond_pass
+0000 0100 1   # EQ
+0000 0000 0   # EQ
+0001 0000 1   # NE
+0001 0100 0   # NE
+0010 0010 1   # CS
+0010 0000 0   # CS
+0011 0000 1   # CC
+0011 0010 0   # CC
+0100 1000 1   # MI
+0100 0000 0   # MI
+0101 0000 1   # PL
+0101 1000 0   # PL
+0110 0001 1   # VS
+0110 0000 0   # VS
+0111 0000 1   # VC
+0111 0001 0   # VC
+1000 0010 1   # HI
+1000 0110 0   # HI
+1001 0110 1   # LS
+1001 0010 0   # LS
+1010 1001 1   # GE
+1010 1000 0   # GE
+1011 1000 1   # LT
+1011 1001 0   # LT
+1100 1001 1   # GT
+1100 1101 0   # GT
+1101 1100 1   # LE
+1101 0000 0   # LE
+1110 0000 1   # AL
+1111 0000 1   # NV
