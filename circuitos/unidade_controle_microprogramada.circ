@@ -347,15 +347,14 @@
       <a name="in_width" val="8"/>
       <a name="label" val="Dispatch"/>
       <a name="out_width" val="6"/>
-      <a name="table">00000000 010000 # ADD
-00000000 010001 # SUB
-00000000 010010 # AND
-00000000 010011 # ORR
-00000000 010100 # CMP
-00000000 010101 # MOV
-00000000 100000 # LDR
-00000000 110000 # STR
-00000000 111111 # Branch (B)
+      <a name="table">00x0010x 010001 # SUB
+00x0000x 010010 # AND
+00x1100x 010011 # ORR
+00x10101 010100 # CMP
+00x1101x 010101 # MOV
+01xxxxx1 100000 # LDR
+01xxxxx0 110000 # STR
+1010xxxx 111111 # Branch (B)
 </a>
     </comp>
     <comp lib="1" loc="(320,460)" name="AND Gate"/>
