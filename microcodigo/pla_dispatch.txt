@@ -1,0 +1,31 @@
+# Logisim PLA program table
+# Entrada (8 bits, MSB->LSB): IR[27:20] = bit27 bit26 I opcode[24:21] S
+# Saida (6 bits): microendereco na uROM
+# Padroes preenchidos pelo Grupo D (pendencia do dossie de integracao).
+# Variantes S=0/S=1 e imediato/registrador despacham para palavras distintas:
+# S decide FlagsWrite e I decide ALU_srcB (imediato vs shifter) na palavra.
+00001000 010000 # ADD  reg S=0 -> 0x10
+00000100 010001 # SUB  reg S=0 -> 0x11
+00000000 010010 # AND  reg S=0 -> 0x12
+00011000 010011 # ORR  reg S=0 -> 0x13
+00010101 010100 # CMP  reg      -> 0x14
+00011010 010101 # MOV  reg S=0 -> 0x15
+00001001 010110 # ADDS reg      -> 0x16
+00000101 010111 # SUBS reg      -> 0x17
+00000001 011000 # ANDS reg      -> 0x18
+00011001 011001 # ORRS reg      -> 0x19
+00011011 011010 # MOVS reg      -> 0x1A
+00101000 001000 # ADD  imm S=0 -> 0x08
+00100100 001001 # SUB  imm S=0 -> 0x09
+00100000 001010 # AND  imm S=0 -> 0x0A
+00111000 001011 # ORR  imm S=0 -> 0x0B
+00111010 001100 # MOV  imm S=0 -> 0x0C
+00110101 001101 # CMP  imm      -> 0x0D
+00101001 000010 # ADDS imm      -> 0x02
+00100101 000011 # SUBS imm      -> 0x03
+00100001 000100 # ANDS imm      -> 0x04
+00111001 000101 # ORRS imm      -> 0x05
+00111011 000110 # MOVS imm      -> 0x06
+01xxxxx1 100000 # LDR           -> 0x20
+01xxxxx0 110000 # STR           -> 0x30
+101xxxxx 111111 # B / Bcc       -> 0x3F

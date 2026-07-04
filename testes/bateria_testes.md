@@ -1,8 +1,45 @@
 # Bateria de testes (Grupo D)
 
-Programas de teste do nucleo minimo, com binario gerado e estado final esperado calculado por simulador do subconjunto ARMv7. A coluna observado e preenchida apos a integracao do Grupo B.
+Programas de teste do nucleo minimo, com binario gerado e estado final esperado calculado por simulador do subconjunto ARMv7.
 
 Convencoes: reset zera todos os registradores e a memoria. O PC lido no calculo de branch vale endereco mais 8. Cada programa termina em `B fim` (desvio para a propria instrucao), entao o processador estaciona nesse endereco; o valor final de R15/PC nao e um dado a conferir. As flags sao mostradas na ordem N Z C V.
+
+Status de validacao: os estados esperados abaixo foram conferidos de duas formas independentes — pelo simulador de referencia da ISA (`simulador_subconjunto.py`, 5/5 OK) e pela execucao dos mesmos binarios atraves do microcodigo real do Grupo C (`verifica_microcodigo.py`, nesta pasta, 5/5 OK).
+
+## P0: Programa embarcado na ROM do circuito (laco com shift)
+
+Este e o programa que ja vem carregado na ROM de instrucoes do `circuitos/cpu_principal.circ`. Exercita MOV imediato, ADD registrador, MOV com LSL (segundo operando deslocado), SUBS com flags e BNE. O `B fim` no endereco 0x20 foi acrescentado na revisao final: sem ele, apos o laco o PC caia em ROM zerada e executava `ANDEQ R0,R0,R0` indefinidamente.
+
+_R3 = (6+5) << 1 = 22; o laco decrementa R3 ate zero e conta as iteracoes em R5._
+
+### Programa (assembly e binario)
+
+| Endereco | Assembly | Hex |
+|---|---|---|
+| 0x00 | `MOV R1, #6` | `E3A01006` |
+| 0x04 | `MOV R2, #5` | `E3A02005` |
+| 0x08 | `MOV R4, #1` | `E3A04001` |
+| 0x0C | `ADD R3, R1, R2` | `E0813002` |
+| 0x10 | `MOV R3, R3, LSL #1` | `E1A03083` |
+| 0x14 | `SUBS R3, R3, R4` | `E0533004` |
+| 0x18 | `ADD R5, R5, #1` | `E2855001` |
+| 0x1C | `BNE loop` (volta a 0x14) | `1AFFFFFC` |
+| 0x20 | `B fim` | `EAFFFFFE` |
+
+Arquivo de ROM pronto para carregar: `rom_p0.txt` (formato v2.0 raw do Logisim).
+
+### Estado final esperado
+
+| Item | Esperado |  |
+|---|---|---|
+| R1 | 0x6 (6) |  |
+| R2 | 0x5 (5) |  |
+| R3 | 0x0 (0) |  |
+| R4 | 0x1 (1) |  |
+| R5 | 0x16 (22) |  |
+| Flags N Z C V | 0 1 1 0 |  |
+
+> Registradores nao listados devem permanecer em 0.
 
 ## P1: Soma de 1 a 5 com laco condicional
 
@@ -25,7 +62,7 @@ Arquivo de ROM pronto para carregar: `rom_p1.txt` (formato v2.0 raw do Logisim).
 
 ### Estado final esperado
 
-| Item | Esperado | Observado |
+| Item | Esperado |  |
 |---|---|---|
 | R0 | 0xF (15) |  |
 | Flags N Z C V | 0 1 1 0 |  |
@@ -55,7 +92,7 @@ Arquivo de ROM pronto para carregar: `rom_p2.txt` (formato v2.0 raw do Logisim).
 
 ### Estado final esperado
 
-| Item | Esperado | Observado |
+| Item | Esperado |  |
 |---|---|---|
 | R0 | 0xC (12) |  |
 | R1 | 0xA (10) |  |
@@ -88,7 +125,7 @@ Arquivo de ROM pronto para carregar: `rom_p3.txt` (formato v2.0 raw do Logisim).
 
 ### Estado final esperado
 
-| Item | Esperado | Observado |
+| Item | Esperado |  |
 |---|---|---|
 | R0 | 0x7 (7) |  |
 | R1 | 0x7 (7) |  |
@@ -119,7 +156,7 @@ Arquivo de ROM pronto para carregar: `rom_p4.txt` (formato v2.0 raw do Logisim).
 
 ### Estado final esperado
 
-| Item | Esperado | Observado |
+| Item | Esperado |  |
 |---|---|---|
 | R0 | 0xAB (171) |  |
 | R1 | 0x40 (64) |  |
@@ -127,6 +164,6 @@ Arquivo de ROM pronto para carregar: `rom_p4.txt` (formato v2.0 raw do Logisim).
 | R6 | 0xAB (171) |  |
 | Flags N Z C V | 0 0 0 0 |  |
 | Mem[0x40] | 0xAB |  |
-| Mem[0x44] | 0xAB |  |
+| Mem[0x44] | 0xAB |  
 
 > Registradores nao listados devem permanecer em 0.
