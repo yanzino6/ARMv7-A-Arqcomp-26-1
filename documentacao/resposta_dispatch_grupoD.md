@@ -67,21 +67,27 @@ finais da bateria do Grupo D:
 [2] P0..P4: OK (registradores, flags e memoria conferem)
 ```
 
-## 4. Dois pontos de integracao a fechar (importantes)
+## 4. Dois pontos de integracao — RESOLVIDOS
 
-1. **`cond_pass` nao pode cortar o PCWrite do fetch.** Hoje os 4 ANDs gateiam
-   o pino `PCWrite_Out` sempre. Como o IR ainda segura a instrucao antiga
-   durante o fetch seguinte, uma condicao falsa congela o PC por um ciclo e a
-   instrucao seguinte **executa duas vezes**. Nos testes P0–P4 isso passa
-   despercebido (as instrucoes re-executadas sao idempotentes), mas
-   `ADDNE ...` seguido de `ADD R5,R5,#1` somaria 2. Conforme o contrato do
-   avaliador (`documentacao/contrato_avaliador_condicao.md`), `cond_pass` deve
-   gatear apenas os commits de execucao; o PCWrite do estado de fetch precisa
-   passar por fora do AND (por exemplo, OR com o sinal "estado = fetch").
-2. **Semantica de `invB_cin = 10` com o Grupo A.** Para subtracao, a intencao
-   e `Rn + NOT(Op2) + 1`. Se a ALU ler os dois bits literalmente (bit1 =
-   inverte B, bit0 = carry-in), `10` da carry-in 0 e toda subtracao sai com
-   um a menos — o verificador mostra P1 travando e P0/P2/P3 divergindo nesse
-   cenario. Ou a ALU liga o carry-in internamente quando inverte B, ou a
-   palavra deve usar `11`. Precisa ser fechado com o Grupo A antes da
-   integracao final.
+1. **`cond_pass` nao pode cortar o PCWrite do fetch. [RESOLVIDO]** Antes os 4
+   ANDs gateavam o pino `PCWrite_Out` sempre. Como o IR ainda segura a
+   instrucao antiga durante o fetch seguinte, uma condicao falsa congelava o PC
+   por um ciclo e a instrucao seguinte **executava duas vezes**. Nos testes
+   P0–P4 isso passava despercebido (as instrucoes re-executadas sao
+   idempotentes), mas `ADDNE ...` seguido de `ADD R5,R5,#1` somaria 2.
+   **Correcao aplicada em `circuitos/unidade_controle_microprogramada.circ`:**
+   o PCWrite passa agora por `PCWrite_Out = PCWrite_word AND (cond_pass OR
+   MemRead)`. Como so o fetch (`MemRead=1`) e o branch (`MemRead=0`) levantam
+   PCWrite na uROM, o OR libera o PCWrite do fetch incondicionalmente e mantem
+   o branch condicional. Os outros tres commits (`RegWrite`, `MemWrite`,
+   `FlagsWrite`) continuam gateados so por `cond_pass`. Prova automatizada em
+   `testes/verifica_fix_cond_pass.py` (circuito antigo: R1=7; corrigido: R1=6).
+   *Falta apenas a confirmacao visual no Logisim GUI.*
+2. **Semantica de `invB_cin = 10`. [RESOLVIDO]** Para subtracao, a intencao e
+   `Rn + NOT(Op2) + 1`. Se a ALU ler os dois bits literalmente (bit1 = inverte
+   B, bit0 = carry-in), `10` da carry-in 0 e toda subtracao sai com um a menos.
+   **Correcao aplicada em `microcodigo/urom.txt`:** as seis palavras da familia
+   SUB/CMP (0x03, 0x09, 0x0D, 0x11, 0x14, 0x17) passaram de `invB_cin=10` para
+   `11`, que e correto tanto se a ALU ler o carry-in literalmente quanto se ele
+   for derivado do bit de inversao. O verificador confirma P0–P4 OK inclusive no
+   cenario literal (`verifica_microcodigo.py`, secao [3b], 5/5 OK).

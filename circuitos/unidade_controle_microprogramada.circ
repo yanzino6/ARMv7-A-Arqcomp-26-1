@@ -404,7 +404,6 @@
     <wire from="(240,480)" to="(270,480)"/>
     <wire from="(240,540)" to="(240,600)"/>
     <wire from="(240,540)" to="(270,540)"/>
-    <wire from="(240,600)" to="(240,660)"/>
     <wire from="(240,600)" to="(270,600)"/>
     <wire from="(240,660)" to="(270,660)"/>
     <wire from="(320,350)" to="(470,350)"/>
@@ -647,5 +646,36 @@
     <wire from="(940,450)" to="(940,460)"/>
     <wire from="(940,470)" to="(940,480)"/>
     <wire from="(940,490)" to="(940,500)"/>
+    <comp lib="0" loc="(240,460)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="cond_pass"/>
+      <a name="labelfont" val="SansSerif bold 9"/>
+    </comp>
+    <comp lib="0" loc="(240,660)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="pc_gate"/>
+      <a name="labelfont" val="SansSerif bold 9"/>
+    </comp>
+    <comp lib="1" loc="(1120,650)" name="OR Gate">
+      <a name="size" val="50"/>
+    </comp>
+    <comp lib="0" loc="(1040,630)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="cond_pass"/>
+      <a name="labelfont" val="SansSerif bold 9"/>
+    </comp>
+    <comp lib="0" loc="(1040,670)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="MemRead"/>
+      <a name="labelfont" val="SansSerif bold 9"/>
+    </comp>
+    <comp lib="0" loc="(1150,650)" name="Tunnel">
+      <a name="label" val="pc_gate"/>
+      <a name="labelfont" val="SansSerif bold 9"/>
+    </comp>
+    <wire from="(240,460)" to="(240,480)"/>
+    <wire from="(1040,630)" to="(1070,630)"/>
+    <wire from="(1040,670)" to="(1070,670)"/>
+    <wire from="(1120,650)" to="(1150,650)"/>
   </circuit>
 </project>

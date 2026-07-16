@@ -326,7 +326,7 @@ PLA de dispatch (25 termos, entrada `IR[27:20]`, saida = microendereco de 6 bits
 
 O microcodigo completo foi validado executando os cinco programas de teste P0–P4 diretamente sobre os arquivos `pla_dispatch.txt` + `urom.txt` reais (`testes/verifica_microcodigo.py`, verificacao [2]): os estados finais de registradores, flags e memoria conferem com a bateria do Grupo D nos cinco programas.
 
-**Pontos de integracao em aberto** (detalhados em `documentacao/resposta_dispatch_grupoD.md`): (i) o `cond_pass` hoje mascara tambem o `PCWrite` do estado de fetch, o que re-executa a instrucao seguinte a uma condicao falsa - o gating deve valer so para os commits de execucao, conforme o contrato do avaliador; (ii) a semantica dos dois bits de `invB_cin` precisa ser confirmada com o Grupo A (se o carry de entrada nao acompanhar a inversao de B, toda subtracao sai com um a menos - cenario [3b] do verificador).
+**Pontos de integracao — resolvidos** (detalhados em `documentacao/resposta_dispatch_grupoD.md`): (i) o `cond_pass` mascarava tambem o `PCWrite` do estado de fetch, re-executando a instrucao seguinte a uma condicao falsa; foi corrigido para `PCWrite_Out = PCWrite AND (cond_pass OR MemRead)`, liberando o PCWrite do fetch e mantendo o branch condicional (prova em `testes/verifica_fix_cond_pass.py`); (ii) a semantica de `invB_cin` na subtracao foi fechada trocando as seis palavras SUB/CMP da uROM de `10` para `11`, correta nas duas leituras possiveis da ALU (cenario [3b] do verificador agora 5/5 OK). Resta apenas a confirmacao visual da unidade microprogramada no Logisim GUI.
 
 ### 5.4 Avaliador de condicao (PLA de condicao)
 
