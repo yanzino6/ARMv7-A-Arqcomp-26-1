@@ -1,10 +1,10 @@
-# Processador ARMv7-A no Logisim — controle microprogramado (uROM + PLAs)
+# Processador ARMv7-A no Logisim   controle microprogramado (uROM + PLAs)
 
 Projeto da disciplina de Arquitetura e Organizacao de Computadores (2026/1).
 Subconjunto do ARMv7-A com caminho de dados modular no Logisim Evolution e
 unidade de controle microprogramada.
 
-**Comece por aqui:** [`relatorio.md`](relatorio.md) — relatorio completo, com o
+**Comece por aqui:** [`relatorio.md`](relatorio.md)   relatorio completo, com o
 conjunto de instrucoes (campos, opcode, flags, funcionamento e modos de
 enderecamento), a arquitetura, o microcodigo e os testes.
 
